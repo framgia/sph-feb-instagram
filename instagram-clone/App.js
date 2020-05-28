@@ -1,26 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import TabNavigator from "./navigation/TabNavigator";
+
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+
+import rootReducer from "./reducers";
+
+const store = createStore(rootReducer);
 
 class App extends React.Component {
-  state = {
-    count: 10,
-  };
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <Provider store={store}>
+        <TabNavigator />
+      </Provider>
     );
   }
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
