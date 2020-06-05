@@ -4,13 +4,13 @@ const initialState = {
   auth: null,
 };
 
-const activityReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPES.SET_AUTH_USER:
-      return { ...state, user: action.payload.user };
+      return { ...state, auth: action.payload.user };
     default:
       return state;
   }
 };
 
-export default activityReducer;
+export default userReducer;

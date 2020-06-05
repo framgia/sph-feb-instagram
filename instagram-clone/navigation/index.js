@@ -15,27 +15,38 @@ class AppNavigator extends React.Component {
 
     this.state = {
       isAuth: false,
+      fetching: false,
     };
   }
   componentDidMount() {
+    this.setState({ fetching: true, isAuth: false });
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.props.setAuthUser(user);
+        this.props.dispatch(setAuthUser(user));
         this.setState({ isAuth: true });
       } else {
         this.setState({ isAuth: false });
       }
+      this.setState({ fetching: false });
     });
   }
 
   render() {
-    return (
+    return this.state.fetching ? (
+      <View>
+        <Text>test</Text>
+      </View>
+    ) : (
       <NavigationContainer>
-        <StatusBar backgroundColor="transparent" barStyle="dark-content" />
         {this.state.isAuth && <TabNavigator />}
         {!this.state.isAuth && <AuthNavigator />}
       </NavigationContainer>
     );
   }
 }
-export default connect(null, { setAuthUser })(AppNavigator);
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch,
+});
+
+export default connect(null, mapDispatchToProps)(AppNavigator);
