@@ -35,7 +35,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Search"
-        component={Search}
+        component={SearchNavigator}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <Ionicons name={focused ? "md-search" : "ios-search"} size={32} />
@@ -43,9 +43,10 @@ const TabNavigator = () => {
         })}
       />
       <Tab.Screen
-        name="Upload"
-        component={Upload}
+        name="Camera"
+        component={CameraNavigator}
         options={() => ({
+          tabBarVisible: false,
           tabBarIcon: ({ focused }) => (
             <Ionicons
               name={focused ? "ios-add-circle" : "ios-add-circle-outline"}
@@ -56,7 +57,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Activity"
-        component={Activity}
+        component={ActivityNavigator}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <Ionicons

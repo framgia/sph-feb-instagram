@@ -6,7 +6,15 @@ import MainNavigator from "./navigation";
 import * as Facebook from "expo-facebook";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import { YellowBox } from "react-native";
+import { decode, encode } from "base-64";
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
 
 import rootReducer from "./reducers";
 
@@ -16,7 +24,8 @@ const store = createStore(rootReducer);
 //Facebook
 Facebook.initializeAsync("550263242330720", "Photogram");
 
-YellowBox.ignoreWarnings(["Require cycle:", "Remote debugger"]);
+// YellowBox.ignoreWarnings(["Require cycle:", "Remote debugger"]);
+console.disableYellowBox = true;
 
 // Fonts
 const fetchFonts = () => {
