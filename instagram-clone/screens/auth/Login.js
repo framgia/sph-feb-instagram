@@ -94,7 +94,7 @@ class Login extends Component {
     return (
       <SafeAreaView style={styles.container}>
         {this.state.isLoading ? (
-          <View style={authStyles.loading}>
+          <View style={styles.loading}>
             <ActivityIndicator size="large" />
           </View>
         ) : null}

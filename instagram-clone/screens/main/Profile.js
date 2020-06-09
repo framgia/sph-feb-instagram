@@ -1,11 +1,19 @@
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Button } from "react-native";
+import firebase from "../../configs/firebase";
 
 class Profile extends Component {
+  logout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {});
+  };
   render() {
     return (
       <View>
-        <Text>Profile</Text>
+        <Text>test</Text>
+        <Button title="Logout" onPress={this.logout} />
       </View>
     );
   }

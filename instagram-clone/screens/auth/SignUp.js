@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import md5 from "md5";
 import {
   SafeAreaView,
   ActivityIndicator,
@@ -48,8 +49,21 @@ class SignUp extends Component {
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(({ user }) => {
-        this.saveUser(user);
-        this.setState({ isLoading: false });
+        user
+          .updateProfile({
+            uid: user.uid,
+            email: user.email,
+            displayName: this.state.name,
+            bio: "",
+            photoURL: `http://gravatar.com/avatar/${md5(
+              createdUser.user.email
+            )}?d=identicon`,
+            token: null,
+          })
+          .then(() => {
+            this.saveUser(user);
+            this.setState({ isLoading: false });
+          });
       })
       .catch((err) => {
         this.setState({ isLoading: false });
