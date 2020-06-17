@@ -1,15 +1,17 @@
 import React from "react";
+import { Text, TouchableOpacity } from "react-native";
 import { Feather, SimpleLineIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import Map from "../screens/main/Map";
 import Home from "../screens/main/Home";
-import Search from "../screens/main/Search";
-import Activity from "../screens/main/Activity";
 import Upload from "../screens/main/Post";
+import Search from "../screens/main/Search";
 import Profile from "../screens/main/Profile";
-import { Text, TouchableOpacity } from "react-native";
-import styles from "../screens/styles/style";
+import Activity from "../screens/main/Activity";
 import CameraUpload from "../screens/main/CameraUpload";
+
+import styles from "../screens/styles/style";
 
 const Stack = createStackNavigator();
 
@@ -52,6 +54,8 @@ export const HomeNavigator = (props) => {
           headerShown: false,
         }}
       />
+
+      <Stack.Screen name="Map" component={Map} />
     </Stack.Navigator>
   );
 };

@@ -6,7 +6,14 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
-import { View, Text, StatusBar, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
 import styles from "../styles/style";
 import homeStyles from "../styles/home";
@@ -49,7 +56,6 @@ class Home extends React.Component {
           data={this.props.posts}
           style={homeStyles.cardWrapper}
           renderItem={({ item }) => {
-            console.log(item.postPhoto);
             return (
               <View style={homeStyles.card}>
                 <View style={homeStyles.cardHeader}>
@@ -102,6 +108,15 @@ class Home extends React.Component {
                     </View>
                   </View>
                   <Text>{item.postDescription}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("Map", {
+                        location: item.location,
+                      })
+                    }
+                  >
+                    <Text>{item.location ? item.location.name : ""}</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             );

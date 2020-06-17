@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import { StyleSheet } from "react-native";
-
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "space-between",
-    alignItems: "center",
-    flex: 1,
-=======
 import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
@@ -28,7 +19,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: 9999,
->>>>>>> cf5d5990c12dc07faac1960da748641568cb86a9
   },
 });
 

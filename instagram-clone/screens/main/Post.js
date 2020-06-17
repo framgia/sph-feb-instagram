@@ -19,12 +19,13 @@ class Post extends Component {
   state = {
     uploading: "",
     post: "",
+    location: null,
     imageUrl: null,
+    showModal: false,
     postRef: firebase.firestore().collection("posts"),
   };
 
   uriToBlob = () => {
-    console.log("convertin");
     const uri = this.props.route.params.imageUri;
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -61,30 +62,61 @@ class Post extends Component {
     this.setState({ post: input });
   };
 
+  setLocation = (location) => {
+    const place = {
+      name: location.name,
+      coords: {
+        lat: location.geometry.location.lat,
+        lng: location.geometry.location.lng,
+      },
+    };
+
+    this.setState({ location: place, showModal: false });
+  };
+
   submitPost = async () => {
     this.setState({ uploading: true });
     await this.upload();
     const { uid, photoURL, displayName } = this.props.auth;
     const post = {
+      location: this.state.location,
       postPhoto: this.state.imageUrl,
       postDescription: this.state.post,
       uid: uid,
       photo: photoURL,
       username: displayName,
-      created: firebase.database.ServerValue.TIMESTAMP,
+      created: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
     const ref = await this.state.postRef.doc();
     post.id = ref.id;
     ref.set(post);
     this.setState({ uploading: false });
+    this.clearFields();
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{ name: "Camera" }],
+    });
     this.props.navigation.navigate("Home");
+  };
+
+  clearFields = () => {
+    this.setState({
+      uploading: "",
+      post: "",
+      location: null,
+      imageUrl: null,
+      showModal: false,
+    });
   };
 
   render() {
     return (
       <ScrollView style={{ flex: 1 }}>
-        {/* <LocationModal /> */}
+        <LocationModal
+          selectLocation={this.setLocation}
+          isVisible={this.state.showModal}
+        />
         {this.state.uploading ? (
           <View style={styles.loading}>
             <ActivityIndicator size="large" />
@@ -102,8 +134,13 @@ class Post extends Component {
             style={postStyles.input}
             onChangeText={this.postHandler}
           />
-          <TouchableOpacity style={postStyles.location}>
-            <Text style={{ color: "grey", fontSize: 17 }}> Test </Text>
+          <TouchableOpacity
+            style={postStyles.location}
+            onPress={() => this.setState({ showModal: true })}
+          >
+            <Text style={{ color: "grey", fontSize: 17 }}>
+              {this.state.location ? this.state.location.name : "Set Location"}
+            </Text>
           </TouchableOpacity>
           <View style={postStyles.wrapper}>
             <TouchableOpacity
