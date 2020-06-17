@@ -12,7 +12,6 @@ import {
   StatusBar,
   FlatList,
   Image,
-  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
