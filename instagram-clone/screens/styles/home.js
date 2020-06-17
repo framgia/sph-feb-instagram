@@ -1,11 +1,13 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const homeStyles = StyleSheet.create({
-  image: {
+  postImage: {
     width: "100%",
     height: 300,
     borderColor: "#d3d3d3",
     borderWidth: 0.3,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardWrapper: {
     width: Dimensions.get("window").width,

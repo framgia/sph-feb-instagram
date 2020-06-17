@@ -83,6 +83,7 @@ class Post extends Component {
       postPhoto: this.state.imageUrl,
       postDescription: this.state.post,
       uid: uid,
+      likes: [],
       photo: photoURL,
       username: displayName,
       created: firebase.firestore.FieldValue.serverTimestamp(),
