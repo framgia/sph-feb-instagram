@@ -29,6 +29,7 @@ class Home extends React.Component {
       postRef: firebase.firestore().collection("posts"),
       activityRef: firebase.firestore().collection("activities"),
       isLikeToggled: false,
+      toggledId: null,
     };
   }
 
@@ -57,7 +58,7 @@ class Home extends React.Component {
   likePost = async (item) => {
     const { photoURL, displayName, uid } = this.props.user;
 
-    this.setState({ isLikeToggled: true });
+    this.setState({ isLikeToggled: true, toggledId: item.id });
 
     await this.state.postRef.doc(item.id).update({
       likes: firebase.firestore.FieldValue.arrayUnion(uid),
@@ -127,9 +128,10 @@ class Home extends React.Component {
                       source={{ uri: item.postPhoto }}
                       style={homeStyles.postImage}
                     >
-                      {this.state.isLikeToggled && (
+                      {this.state.isLikeToggled &&
+                      this.state.toggledId === item.id ? (
                         <Ionicons name="ios-heart" size={100} color="red" />
-                      )}
+                      ) : null}
                     </ImageBackground>
                   </TouchableOpacity>
                 </View>
