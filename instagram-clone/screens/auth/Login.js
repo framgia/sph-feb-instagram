@@ -67,7 +67,6 @@ class Login extends Component {
           .catch((err) => {
             console.log(err);
           });
-        console.log(response.user);
         const user = await this.state.userRef.doc(response.user.uid).get();
 
         if (!user.exists) {
@@ -130,12 +129,7 @@ class Login extends Component {
 
           <View style={{ flexDirection: "row", marginVertical: 10 }}>
             <Text style={{ color: "#b0b0b0" }}>Forgot password ? </Text>
-            <Text
-              style={{ fontWeight: "bold" }}
-              onPress={() => console.log("test")}
-            >
-              Get Help.
-            </Text>
+            <Text style={{ fontWeight: "bold" }}>Get Help.</Text>
           </View>
 
           <View style={{ width: "100%" }}>

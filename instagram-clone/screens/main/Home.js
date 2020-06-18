@@ -6,7 +6,15 @@ import {
   MaterialCommunityIcons,
   SimpleLineIcons,
 } from "@expo/vector-icons";
-import { View, Text, StatusBar, FlatList, Image } from "react-native";
+import {
+  View,
+  Text,
+  StatusBar,
+  FlatList,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 
 import styles from "../styles/style";
 import homeStyles from "../styles/home";
@@ -19,6 +27,9 @@ class Home extends React.Component {
 
     this.state = {
       postRef: firebase.firestore().collection("posts"),
+      activityRef: firebase.firestore().collection("activities"),
+      isLikeToggled: false,
+      toggledId: null,
     };
   }
 
@@ -31,17 +42,61 @@ class Home extends React.Component {
   fetchPosts = () => {
     this.state.postRef
       .orderBy("created", "desc")
-      .get()
-      .then((querySnapshot) => {
-        const data = querySnapshot.docs.map((doc) => doc.data());
+      .onSnapshot((querySnapshot) => {
+        const data = [];
+        querySnapshot.forEach((doc) => data.push(doc.data()));
         this.props.dispatch(setFeed(data));
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
+  toggleLike = (item) => {
+    const { uid } = this.props.user;
+
+    item.likes.includes(uid) ? this.unlikePost(item) : this.likePost(item);
+  };
+
+  likePost = async (item) => {
+    const { photoURL, displayName, uid } = this.props.user;
+
+    this.setState({ isLikeToggled: true, toggledId: item.id });
+
+    await this.state.postRef.doc(item.id).update({
+      likes: firebase.firestore.FieldValue.arrayUnion(uid),
+    });
+
+    this.setState({ isLikeToggled: false });
+
+    this.state.activityRef.doc().set({
+      postId: item.id,
+      postPhoto: item.postPhoto,
+      likerId: uid,
+      likerPhoto: photoURL,
+      likerName: displayName,
+      uid: item.uid,
+      date: new Date().getTime(),
+      type: "Like",
+    });
+  };
+
+  unlikePost = async (item) => {
+    const { photoURL, displayName, uid } = this.props.user;
+
+    await this.state.postRef.doc(item.id).update({
+      likes: firebase.firestore.FieldValue.arrayRemove(uid),
+    });
+
+    const query = await this.state.activityRef
+      .where("postId", "==", item.id)
+      .where("likerId", "==", uid)
+      .get();
+
+    query.forEach((response) => {
+      response.ref.delete();
+    });
+  };
+
   render() {
+    console.log(this.state.isLikeToggled);
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
@@ -49,7 +104,6 @@ class Home extends React.Component {
           data={this.props.posts}
           style={homeStyles.cardWrapper}
           renderItem={({ item }) => {
-            console.log(item.postPhoto);
             return (
               <View style={homeStyles.card}>
                 <View style={homeStyles.cardHeader}>
@@ -69,18 +123,33 @@ class Home extends React.Component {
                   </View>
                 </View>
                 <View style={homeStyles.cardImage}>
-                  <Image
-                    source={{ uri: item.postPhoto }}
-                    style={homeStyles.image}
-                  />
+                  <TouchableOpacity onPress={() => this.toggleLike(item)}>
+                    <ImageBackground
+                      source={{ uri: item.postPhoto }}
+                      style={homeStyles.postImage}
+                    >
+                      {this.state.isLikeToggled &&
+                      this.state.toggledId === item.id ? (
+                        <Ionicons name="ios-heart" size={100} color="red" />
+                      ) : null}
+                    </ImageBackground>
+                  </TouchableOpacity>
                 </View>
                 <View style={homeStyles.cardFooter}>
                   <View style={homeStyles.footerActions}>
                     <View style={homeStyles.actionRight}>
                       <Ionicons
-                        name="ios-heart-empty"
+                        name={
+                          item.likes.includes(this.props.user.uid)
+                            ? "ios-heart"
+                            : "ios-heart-empty"
+                        }
                         size={30}
-                        color="black"
+                        color={
+                          item.likes.includes(this.props.user.uid)
+                            ? "red"
+                            : "black"
+                        }
                       />
                       <MaterialCommunityIcons
                         name="chat-outline"
@@ -102,6 +171,15 @@ class Home extends React.Component {
                     </View>
                   </View>
                   <Text>{item.postDescription}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.props.navigation.navigate("Map", {
+                        location: item.location,
+                      })
+                    }
+                  >
+                    <Text>{item.location ? item.location.name : ""}</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             );
@@ -118,6 +196,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   posts: state.posts.feed,
+  user: state.user.auth,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -6,11 +6,13 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
-import Home from "../screens/main/Home";
-import Search from "../screens/main/Search";
-import Activity from "../screens/main/Activity";
-import Upload from "../screens/main/Upload";
-import Profile from "../screens/main/Profile";
+import {
+  HomeNavigator,
+  CameraNavigator,
+  ActivityNavigator,
+  SearchNavigator,
+  ProfileNavigator,
+} from "./HomeNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -23,7 +25,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
+        component={HomeNavigator}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
@@ -69,7 +71,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileNavigator}
         options={() => ({
           tabBarIcon: ({ focused }) => (
             <MaterialIcons

@@ -19,7 +19,7 @@ const CategoriesScreen = (props) => {
             params: { categoryId: item_data.item.id },
           });
         }}
-      />
+      />  
     );
   };
 

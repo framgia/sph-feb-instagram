@@ -31,8 +31,9 @@ const postStyles = StyleSheet.create({
   },
   location: {
     width: "80%",
-    marginTop: 20,
-    height: 30,
+    marginTop: 10,
+    paddingBottom: 5,
+    paddingLeft: 5,
     justifyContent: "center",
     borderBottomColor: "#dadada",
     borderBottomWidth: 1,
