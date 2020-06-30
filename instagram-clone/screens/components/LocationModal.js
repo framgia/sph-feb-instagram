@@ -35,6 +35,15 @@ class LocationModal extends Component {
           visible={this.props.isVisible}
         >
           <View style={{ width: "100%", alignItems: "center" }}>
+            <TouchableOpacity
+              style={{
+                ...postStyles.location,
+                width: "100%",
+              }}
+              onPress={this.props.toggleModal}
+            >
+              <Text style={{ color: "grey", fontSize: 20 }}>Cancel</Text>
+            </TouchableOpacity>
             <FlatList
               keyExtractor={(item) => item.id}
               data={this.state.locations}

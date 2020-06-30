@@ -117,6 +117,7 @@ class Post extends Component {
         <LocationModal
           selectLocation={this.setLocation}
           isVisible={this.state.showModal}
+          toggleModal={() => this.setState({ showModal: false })}
         />
         {this.state.uploading ? (
           <View style={styles.loading}>

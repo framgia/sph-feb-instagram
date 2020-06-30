@@ -96,7 +96,6 @@ class Home extends React.Component {
   };
 
   render() {
-    console.log(this.state.isLikeToggled);
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
@@ -151,11 +150,19 @@ class Home extends React.Component {
                             : "black"
                         }
                       />
-                      <MaterialCommunityIcons
-                        name="chat-outline"
-                        size={30}
-                        color="black"
-                      />
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.props.navigation.navigate("Comments", {
+                            postId: item.id,
+                          })
+                        }
+                      >
+                        <MaterialCommunityIcons
+                          name="chat-outline"
+                          size={30}
+                          color="black"
+                        />
+                      </TouchableOpacity>
                       <SimpleLineIcons
                         name="paper-plane"
                         size={30}
