@@ -1,8 +1,10 @@
-import React, { Component } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React from "react";
 import moment from "moment";
+import { View, Text, Image } from "react-native";
 
-export default class ActivityItem extends Component {
+import activityStyles from "../styles/Activity";
+
+export default class ActivityItem extends React.Component {
   render() {
     const {
       likerName,
@@ -16,7 +18,7 @@ export default class ActivityItem extends Component {
       <View style={activityStyles.item}>
         <Image source={{ uri: likerPhoto }} style={activityStyles.userImg} />
         <View style={activityStyles.description}>
-          <View style={activityStyles.content}>
+          <View>
             <Text style={activityStyles.boldText}>{likerName}</Text>
             <Text>Liked your photo</Text>
           </View>
@@ -30,27 +32,3 @@ export default class ActivityItem extends Component {
     );
   }
 }
-
-const activityStyles = StyleSheet.create({
-  item: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  userImg: {
-    height: 70,
-    width: 70,
-    borderRadius: 99,
-  },
-  description: {
-    flex: 1,
-    marginLeft: 10,
-    marginTop: 10,
-  },
-  content: {
-    flexDirection: "row",
-  },
-  boldText: {
-    fontWeight: "bold",
-  },
-});

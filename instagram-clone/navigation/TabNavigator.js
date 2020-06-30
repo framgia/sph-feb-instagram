@@ -16,7 +16,7 @@ import {
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+const TabNavigator = (props) => {
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -72,13 +72,16 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Profile"
         component={ProfileNavigator}
-        options={() => ({
-          tabBarIcon: ({ focused }) => (
-            <MaterialIcons
-              name={focused ? "person" : "person-outline"}
-              size={32}
-            />
-          ),
+        options={({ route }) => ({
+          tabBarVisible: route.state == undefined || route.state.index != 1,
+          tabBarIcon: ({ focused }) => {
+            return (
+              <MaterialIcons
+                name={focused ? "person" : "person-outline"}
+                size={32}
+              />
+            );
+          },
         })}
       />
     </Tab.Navigator>
