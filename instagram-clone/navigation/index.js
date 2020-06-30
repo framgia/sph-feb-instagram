@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { StatusBar, View, Image, Text } from "react-native";
+import { View, Image, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 
 import firebase from "../configs/firebase";
@@ -16,14 +16,20 @@ class AppNavigator extends React.Component {
     this.state = {
       isAuth: false,
       fetching: false,
+      userRef: firebase.firestore().collection("users"),
     };
   }
   componentDidMount() {
     this.setState({ fetching: true, isAuth: false });
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.props.dispatch(setAuthUser(user));
-        this.setState({ isAuth: true });
+        this.state.userRef
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            this.props.dispatch(setAuthUser(doc.data()));
+            this.setState({ isAuth: true });
+          });
       } else {
         this.setState({ isAuth: false });
       }

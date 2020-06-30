@@ -8,6 +8,7 @@ import Home from "../screens/main/Home";
 import Upload from "../screens/main/Post";
 import Search from "../screens/main/Search";
 import Profile from "../screens/main/Profile";
+import EditProfile from "../screens/main/EditProfile";
 import Activity from "../screens/main/Activity";
 import CameraUpload from "../screens/main/CameraUpload";
 
@@ -95,8 +96,17 @@ export const CameraNavigator = () => {
 
 export const ProfileNavigator = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Navigator mode="modal">
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Edit Profile"
+        component={EditProfile}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

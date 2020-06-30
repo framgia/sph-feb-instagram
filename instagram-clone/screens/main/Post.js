@@ -77,15 +77,15 @@ class Post extends Component {
   submitPost = async () => {
     this.setState({ uploading: true });
     await this.upload();
-    const { uid, photoURL, displayName } = this.props.auth;
+    const { uid, photo, username } = this.props.auth;
     const post = {
       location: this.state.location,
       postPhoto: this.state.imageUrl,
       postDescription: this.state.post,
       uid: uid,
       likes: [],
-      photo: photoURL,
-      username: displayName,
+      photo: photo,
+      username: username,
       created: firebase.firestore.FieldValue.serverTimestamp(),
     };
 
