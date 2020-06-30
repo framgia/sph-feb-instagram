@@ -13,6 +13,7 @@ import Activity from "../screens/main/Activity";
 import CameraUpload from "../screens/main/CameraUpload";
 
 import styles from "../screens/styles/style";
+import Comments from "../screens/main/Comments";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +58,7 @@ export const HomeNavigator = (props) => {
       />
 
       <Stack.Screen name="Map" component={Map} />
+      <Stack.Screen name="Comments" component={Comments} />
     </Stack.Navigator>
   );
 };

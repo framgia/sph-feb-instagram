@@ -8,3 +8,22 @@ export const setFeed = (posts) => {
     },
   };
 };
+
+export const findPost = (postId) => {
+  return {
+    type: ACTION_TYPES.FIND_POST,
+    payload: {
+      postId,
+    },
+  };
+};
+
+export const addComment = (comment, postId) => {
+  return {
+    type: ACTION_TYPES.ADD_COMMENT,
+    payloads: {
+      postId,
+      comment,
+    },
+  };
+};

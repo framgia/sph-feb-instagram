@@ -1,6 +1,7 @@
 import React from "react";
 import { Camera } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from "expo-image-manipulator";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 
@@ -25,33 +26,8 @@ class CameraUpload extends React.Component {
     const image = await this.camera.takePictureAsync();
 
     if (!image.cancelled) {
-      const resize = await ImageManipulator.manipulateAsync(image.uri, [], {
-        format: "jpeg",
-        comporess: 0.1,
-      });
-
-      this.setState({
-        image: resize,
-      });
+      this.resize(image.uri);
     }
-  };
-
-  uriToBlob = () => {
-    const uri = this.state.image.uri;
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = () => resolve(xhr.response);
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
-  };
-
-  upload = async () => {
-    const blob = await this.uriToBlob();
-    const upload = await firebase.storage().ref(uuid.v4()).put(blob);
-    const downloadUrl = await upload.getDownloadUrl();
-    return downloadUrl;
   };
 
   cameraFlip = () => {
@@ -71,6 +47,30 @@ class CameraUpload extends React.Component {
     } else {
       return <Ionicons name="ios-reverse-camera" size={40} color="white" />;
     }
+  };
+
+  openLibrary = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      this.resize(result.uri);
+    }
+  };
+
+  resize = async (uri) => {
+    const resize = await ImageManipulator.manipulateAsync(uri, [], {
+      format: "jpeg",
+      comporess: 0.1,
+    });
+
+    this.setState({
+      image: resize,
+    });
   };
 
   render() {
@@ -104,7 +104,7 @@ class CameraUpload extends React.Component {
                 });
               }}
             >
-              <Ionicons name="md-arrow-forward" size={40} color="black" />
+              <Ionicons name="md-arrow-forward" size={40} color="white" />
             </TouchableOpacity>
           </View>
           <View
@@ -122,9 +122,10 @@ class CameraUpload extends React.Component {
                 this.setState({ image: null });
               }}
             >
-              <Ionicons name="md-close" size={40} color="black" />
+              <Ionicons name="md-close" size={40} color="white" />
             </TouchableOpacity>
           </View>
+
           <Image source={{ uri: image.uri, height: "100%", width: "100%" }} />
         </View>
       );
@@ -194,7 +195,11 @@ class CameraUpload extends React.Component {
                 }}
                 onPress={this.capture}
               ></TouchableOpacity>
-              <View style={{ width: 60 }}></View>
+              <View style={{ width: 60, paddingTop: 15 }}>
+                <TouchableOpacity onPress={this.openLibrary}>
+                  <Ionicons name="ios-images" size={35} color="white" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Camera>

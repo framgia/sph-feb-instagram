@@ -26,7 +26,8 @@ const TabNavigator = (props) => {
       <Tab.Screen
         name="Home"
         component={HomeNavigator}
-        options={() => ({
+        options={({ route }) => ({
+          tabBarVisible: route.state == undefined || route.state.index != 1,
           tabBarIcon: ({ focused }) => (
             <MaterialCommunityIcons
               name={focused ? "home" : "home-outline"}
