@@ -23,13 +23,21 @@ class AppNavigator extends React.Component {
     this.setState({ fetching: true, isAuth: false });
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.state.userRef
-          .doc(user.uid)
-          .get()
-          .then((doc) => {
-            this.props.dispatch(setAuthUser(doc.data()));
-            this.setState({ isAuth: true });
-          });
+        console.log(user.uid);
+        if (user.uid != "undefined") {
+          this.state.userRef
+            .doc(user.uid)
+            .get()
+            .then((doc) => {
+              console.log("data: " + user.uid);
+              this.props.dispatch(
+                setAuthUser(doc.data() == undefined ? user : doc.data())
+              );
+              setTimeout(() => {
+                this.setState({ isAuth: true });
+              }, 1500);
+            });
+        }
       } else {
         this.setState({ isAuth: false });
       }

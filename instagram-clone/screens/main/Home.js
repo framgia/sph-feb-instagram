@@ -96,7 +96,6 @@ class Home extends React.Component {
   };
 
   render() {
-    console.log(this.state.isLikeToggled);
     return (
       <View style={styles.container}>
         <StatusBar backgroundColor="transparent" barStyle="dark-content" />
