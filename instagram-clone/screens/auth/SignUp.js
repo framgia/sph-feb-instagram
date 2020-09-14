@@ -56,7 +56,7 @@ class SignUp extends Component {
             displayName: this.state.name,
             bio: "",
             photoURL: `http://gravatar.com/avatar/${md5(
-              createdUser.user.email
+              user.email
             )}?d=identicon`,
             token: null,
           })
